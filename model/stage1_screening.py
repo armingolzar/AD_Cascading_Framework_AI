@@ -53,10 +53,11 @@ def evaluate(model, dataloader, criterion, device):
             _, predicted = outputs.max(1)
 
             all_preds.extend(predicted.cpu().numpy())
-            all_labels.extend(lables.cpu().numpy())
+            all_labels.extend(labels.cpu().numpy())
 
     total_loss = running_loss / len(dataloader.dataset)
     return total_loss, np.array(all_labels), np.array(all_preds)
+
 
 
 
