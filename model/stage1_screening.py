@@ -34,3 +34,30 @@ class Stage1_Encoder(nn.Module):
         logits = self.classifier(embedding)
         return embedding
 
+def evaluate(model, dataloader, criterion, device):
+
+    model.eval()
+    running_loss = 0
+    all_preds = []
+    all_labels = []
+
+    with torch.no_grad():
+        for batch in dataloader:
+            features = batch["features"].to(device)
+            lables = batch["label"].to(device)
+
+            outputs = model(features)
+            loss = criterion(outputs, lables)
+
+            running_loss += loss.item() * features.size(0)
+            _, predicted = outputs.max(1)
+
+            all_preds.extend(predicted.cpu().numpy())
+            all_labels.extend(lables.cpu().numpy())
+
+    total_loss = running_loss / len(dataloader.dataset)
+    return total_loss, np.array(all_labels), np.array(all_preds)
+
+
+
+
