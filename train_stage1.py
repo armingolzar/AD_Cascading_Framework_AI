@@ -8,6 +8,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report, confusion_matrix
 from data.data_loader import Stage1_Dataset
+from model.stage1_screening import Stage1_Encoder
 
 def main():
 
@@ -22,5 +23,12 @@ def main():
 
     train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
     test_loader = DataLoader(test_dataset, batch_size=32, shuffle=False)
+
+    model = Stage1_Encoder(input_dim=7, embedding_dim=16, num_classes=3).to(device)
+    criterion = nn.CrossEntropyLoss()
+    optimizer = optim.Adam(model.parameters(), lr=0.002, weight_decay=1e-4)
+
+    best_val_loss = float("inf")
+    epochs = 40
 
     
