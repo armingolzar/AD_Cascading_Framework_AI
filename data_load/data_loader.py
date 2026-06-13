@@ -24,7 +24,7 @@ class Stage1_Dataset(Dataset):
             self.means = scaler_meta["means"]
             self.stds = scaler_meta["stds"]
 
-        self.X_scaled = (self.Xraw - self.means) / self.stds
+        self.X_scaled = (self.X_raw - self.means) / self.stds
 
     def get_scaler_meta(self):
         return {"means" : self.means, "stds" : self.stds}

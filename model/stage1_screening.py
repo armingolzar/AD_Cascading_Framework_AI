@@ -1,6 +1,7 @@
 import torch 
 import torch.nn as nn
 import torch.nn.functional as F
+import numpy as np
 
 class Stage1_Encoder(nn.Module):
     def __init__(self, input_dim=7, embedding_dim=16, num_classes=3):
@@ -44,10 +45,10 @@ def evaluate(model, dataloader, criterion, device):
     with torch.no_grad():
         for batch in dataloader:
             features = batch["features"].to(device)
-            lables = batch["label"].to(device)
+            labels = batch["label"].to(device)
 
             outputs = model(features)
-            loss = criterion(outputs, lables)
+            loss = criterion(outputs, labels)
 
             running_loss += loss.item() * features.size(0)
             _, predicted = outputs.max(1)
