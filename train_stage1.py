@@ -8,7 +8,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import classification_report, confusion_matrix
 from data.data_loader import Stage1_Dataset
-from model.stage1_screening import Stage1_Encoder
+from model.stage1_screening import Stage1_Encoder, evaluate
 
 def main():
 
@@ -31,4 +31,51 @@ def main():
     best_val_loss = float("inf")
     epochs = 40
 
-    
+    print("\nBeginning Training Loop...")
+    for epoch in range(epochs):
+        model.train()
+        train_loss = 0.0
+
+        for batch in train_loader:
+            features = batch["features"].to(device)
+            labels = batch["label"].to(device)
+            
+            optimizer.zero_grad()
+            outputs = model(features)
+            loss = criterion(outputs, labels)
+            loss.backward()
+            optimizer.step()
+
+            train_loss += loss.item() * features.size(0)
+
+        epoch_train_loss = train_loss / len(train_loader.dataset)
+        epoch_val_loss, val_labels, val_preds = evaluate(model, test_loader, criterion, device)
+
+        val_acc = np.mean(val_preds == val_labels)
+
+        if epoch_val_loss < best_val_loss:
+            best_val_loss = epoch_val_loss
+            torch.save(model.state_dict(), "best_stage1_encoder.pt")
+            save_msg = "--> Checkpoint Saved"
+        else:
+            save_msg = ""
+
+        if ((epoch + 1) % 5 == 0) or (epoch == 0) or ("Saved" in save_msg):
+            print(f"Epoch [{epoch+1:02d}/{epochs}] | Train Loss: {epoch_train_loss:.4f} | {epoch_val_loss:.4f} | {val_acc*100:.1f}% {save_msg}")
+        
+    print("\nTraining complete. Running final evaluation metrics using optimal checkpoint...")
+    model.load_state_dict(torch.load("best_stage1_encoder.pt"))
+    _, final_labels, final_preds = evaluate(model, test_loader, criterion, device)
+
+    print("\n" + "="*50)
+    print("STAGE 1 CLINICAL EVALUATION METRICS REPORT")
+    print("="*50)
+    print(classification_report(final_labels, final_preds, target_names=["CN (Normal)", "MCI (Mild)", "AD (Alzheimer\'s)"]))
+
+    print("Confusion Matrix Layout:")
+    print(confusion_matrix(final_labels, final_preds))
+
+if __name__ == "__main__":
+    main()
+
+

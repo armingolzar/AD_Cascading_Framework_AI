@@ -11,7 +11,7 @@ from sklearn.metrics import classification_report, confusion_matrix
 class Stage1_Dataset(Dataset):
     def __init__(self, dataframe, scaler_meta=None):
         self.df = dataframe.reset_index(drop=True)
-        self.feature_cols = ["age", "sex", "education_year", "mmse", "moca", "faq", "cdr_sb"]
+        self.feature_cols = ["age", "sex", "education_years", "mmse", "moca", "faq", "cdr_sb"]
 
         self.X_raw = self.df[self.feature_cols].values.astype(np.float32)
         self.y_raw = self.df["diagnostic_class"].values.astype(np.int64)
