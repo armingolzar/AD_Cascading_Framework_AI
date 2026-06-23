@@ -1,0 +1,60 @@
+# ==========================================
+# Machine Learning & Deep Learning Artifacts
+# ==========================================
+# Block all trained models, checkpoints, and weights
+*.pt
+*.pth
+*.ckpt
+*.pkl
+*.h5
+*.joblib
+checkpoints/
+outputs/
+models/精
+
+# ==========================================
+# Datasets and Raw Data
+# ==========================================
+# Block all data directories and common data formats
+data/
+*.csv
+*.json
+*.xlsx
+*.parquet
+*.npy
+*.npz
+
+# ==========================================
+# Environment & Package Managers
+# ==========================================
+# Block Pixi environment folder (from your local trace)
+.pixi/
+
+# Block standard Python virtual environments
+venv/
+.venv/
+env/
+ENV/
+bin/
+
+# ==========================================
+# Python Build & Cache Artifacts
+# ==========================================
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.ipynb_checkpoints/
+dist/
+build/
+*.egg-info/
+
+# ==========================================
+# IDEs and OS-Specific Files
+# ==========================================
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.log
