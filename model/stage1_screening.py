@@ -33,7 +33,7 @@ class Stage1_Encoder(nn.Module):
             return embedding
 
         logits = self.classifier(embedding)
-        return embedding
+        return logits
 
 def evaluate(model, dataloader, criterion, device):
 
