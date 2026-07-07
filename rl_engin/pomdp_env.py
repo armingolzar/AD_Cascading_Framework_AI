@@ -2,6 +2,8 @@ import os
 import pandas as pd 
 import numpy as np
 import torch
+from model.stage1_screening import Stage1_Encoder
+from model.stage2_biomarkers import Stage2_Encoder
 
 class ClinicalPOMDPEnv():
 
@@ -57,7 +59,11 @@ class ClinicalPOMDPEnv():
         self.stage2_probs = np.zeros(3, dtype=np.float32)
 
 
-    
+    # def _load_model(self, model_path, name):
+    #     """Helper to safely alert if a model file path is ready to load."""
+    #     if model_path is not None and os.path.exists(str(model_path)):
+    #         try:
+    #             if 
 
 
 
