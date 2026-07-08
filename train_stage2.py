@@ -51,4 +51,19 @@ def main():
     with open("model/stage2_scaler.pkl", "wb") as f:
         pickle.dump(scaler, f)
 
+    train_set = ClinicalDataPayload(X_train_scaled, y_train)
+    val_set = ClinicalDataPayload(X_val_scaled, y_val)
+
+    train_loader = Dataloader(train_set, batch_size=32, shuffle=True)
+    val_loader = Dataloader(val_set, batch_size=32, shuffle=False)
+
+    model = Stage2_Encoder(input_dim=len(fused_features), hidden_dim=64, num_classes=3).to(device)
+    criterion = nn.CrossEntropyLoss()
+    optimizer = optim.AdamW(model.parameters(), lr=0.002, weight_decay=1e-4)
+
+    matrics_history = {"train_loss" : [], "val_loss" : []}
+    epochs = 40
+    optimal_loss = float("inf")
+
+    print("Beginning Stage 2 Gradient Updates...")
     
