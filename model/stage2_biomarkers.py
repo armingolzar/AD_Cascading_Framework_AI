@@ -4,12 +4,12 @@ import torch.nn.functional as F
 import numpy as np
 
 
-class Stage2_Encoder(nn.module):
+class Stage2_Encoder(nn.Module):
 
     def __init__(self, input_dim=12, hidden_dim=64, num_classes=3):
         super(Stage2_Encoder, self).__init__()
         self.fc1 = nn.Linear(input_dim, hidden_dim)
-        self.bn1 = nn.BatchNrom1d(hidden_dim)
+        self.bn1 = nn.BatchNorm1d(hidden_dim)
 
         self.fc2 = nn.Linear(hidden_dim, hidden_dim)
         self.bn2 = nn.BatchNorm1d(hidden_dim)
@@ -37,7 +37,7 @@ def evaluate2(model, dataloader, criterion, device):
     all_preds = []
     all_labels = []
 
-    with torch.no_grad:
+    with torch.no_grad():
         for batch in dataloader:
             features = batch["features"].to(device)
             labels = batch["label"].to(device)
