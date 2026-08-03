@@ -28,6 +28,23 @@ class Stage1_Dataset(Dataset):
 
     def get_scaler_meta(self):
         return {"means" : self.means, "stds" : self.stds}
+    
+    
+    def save_scaler_meta(self, filepath="model/scaler_meta.npy"):
+        """Saves the calculated training means and stds to disk."""
+        folder = os.path.dirname(filepath)
+        if folder:
+            os.makedirs(folder, exist_ok=True)
+            
+        np.save(filepath, self.get_scaler_meta())
+        print(f"[+] Scaler parameters saved to disk: {filepath}")
+        
+
+    @staticmethod
+    def load_scaler_meta(filepath="model/scaler_meta.npy"):
+        """Utility function to load parameters back into memory from disk."""
+        return np.load(filepath, allow_pickle=True).item()
+    
 
     def __len__(self):
         return len(self.df)
